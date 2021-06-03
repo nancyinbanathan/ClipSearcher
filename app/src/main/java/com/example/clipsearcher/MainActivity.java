@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.text.Editable;
@@ -26,7 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText searchText;
     String searchWord;
     Button searchButton;
-    WebView searchWebView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,25 +63,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void getSearchResults(View view) {
 
-        searchWebView = findViewById(R.id.webviewSearchResult);
-        loadWebView();
+        Intent searchIntent = new Intent(MainActivity.this,ResultActivity.class);
+        searchIntent.putExtra("query","searchWord");
+        startActivity(searchIntent);
 
-    }
-
-    private void loadWebView() {
-        searchWebView.setVisibility(View.VISIBLE);
-        searchText.setVisibility(GONE);
-        searchButton.setVisibility(GONE);
-        searchWebView.getSettings().setJavaScriptEnabled(true);
-        searchWebView.getSettings().setAppCacheEnabled(true);
-        searchWebView.loadUrl("https://duckduckgo.com/?q="+searchWord);
-        searchWebView.setWebViewClient(new WebViewClient(){
-            @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                searchWebView.loadUrl(url);
-                return false;
-            }
-        });
     }
 
     //method to watch for text changes in the search box
@@ -108,14 +94,6 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    @Override
-    public void onBackPressed(){
 
-        if (searchWebView.canGoBack()){
-            searchWebView.goBack();
-        }else {
-            finish();
-        }
-    }
 
 }
